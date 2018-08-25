@@ -5,6 +5,11 @@ plugins {
 group 'eu.cryptofiat'
 version '1.0-SNAPSHOT'
 
+jar {
+    baseName = 'contract-java-abi-example'
+    version = '0.0.1-SNAPSHOT'
+}
+
 sourceCompatibility = 1.8
 
 repositories {
