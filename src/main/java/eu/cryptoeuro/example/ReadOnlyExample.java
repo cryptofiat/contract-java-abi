@@ -20,22 +20,17 @@ public class ReadOnlyExample {
 
     public static void main(String[] args) throws Exception {
         Web3jService service;
-        // service = new HttpService("https://mainnet.infura.io/");
+        // service = new HttpService("https://mainnet.infura.io/v3/");
         service = new HttpService();
+        // service = new UnixIpcService("/Users/egon/Library/Ethereum/geth.ipc");
         Web3j web3j = Web3j.build(service);
         try {
             System.out.println(web3j.web3ClientVersion().send().getWeb3ClientVersion());
 
-            TransactionManager transactionManager = new ReadonlyTransactionManager(web3j, null);
-            CryptoFiat root = CryptoFiat.load("0xa10a263D4336E4466502b2889D27D04582a86663", web3j, transactionManager, BigInteger.valueOf(1), BigInteger.valueOf(1));
-            BigInteger contractsLength = root.contractsLength().send();
+            Contracts contracts = Contracts.loadReadonly(web3j);
 
-            System.out.println(contractsLength);
-
-            //Contracts contracts = Contracts.loadReadonly(web3j);
-
-            //String reserveBank = contracts.reserve.reserveBank().send();
-            //System.out.println(reserveBank);
+            String reserveBank = contracts.reserve.reserveBank().send();
+            System.out.println(reserveBank);
 
             // TransactionReceipt txr = contracts.accounts.transfer("", BigInteger.valueOf(1500)).send();
         } finally {
