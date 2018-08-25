@@ -1,3 +1,4 @@
+package eu.cryptoeuro.example;
 
 import eu.cryptoeuro.contract.*;
 
@@ -14,7 +15,7 @@ import org.web3j.tx.*;
 
 import java.math.BigInteger;
 
-public class Main {
+public class ReadOnlyExample {
     public static void main() throws Exception {
         Contracts contracts = Contracts.httpReadOnly();
 
