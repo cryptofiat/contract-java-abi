@@ -1,12 +1,12 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'signing'
+apply plugin: 'maven-publish'
 
-group 'eu.cryptofiat'
-version '1.0-SNAPSHOT'
+group 'ee.euro2'
+version '0.0.1-SNAPSHOT'
 
 jar {
-    baseName = 'contract-java-abi-example'
+    baseName = 'contract-java-abi'
     version = '0.0.1-SNAPSHOT'
 }
 
@@ -19,4 +19,39 @@ repositories {
 dependencies {
     compile("org.web3j:core:3.5.0")
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            def repoUrl = project.version.endsWith('-SNAPSHOT') ? "https://oss.sonatype.org/content/repositories/snapshots" : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            url repoUrl
+            credentials(PasswordCredentials) {
+                username "${System.env.OSSRH_USERNAME}"
+                password "${System.env.OSSRH_PASSWORD}"
+            }
+        }
+    }
 }
